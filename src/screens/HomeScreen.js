@@ -6,7 +6,7 @@ import { crearUusuario } from '../api/api';
 import { NavigationContainer } from '@react-navigation/native';
 
 
-export const HomeScreen = () => {
+export const HomeScreen = ({navigator}) => {
 
 
 
@@ -24,7 +24,9 @@ export const HomeScreen = () => {
     }
 
     const crearusuario = async () => {
-        crearUusuario(state.nombre, state.apellido, state.correo)
+        crearUusuario(state.nombre, state.apellido, state.correo);
+        navigator.navigate('card')
+
     }
 
 
