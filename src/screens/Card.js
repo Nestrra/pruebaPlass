@@ -1,38 +1,75 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
-import { db } from '../database/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { StyleSheet, Text, View } from 'react-native';
+import { getUsuario } from '../api/api';
 
 
 
 
 export const Card = () => {
 
-    const [user, setUser] = useState([]);
+    const [usuario, setusuario] = useState(null)
 
-    const usuarioColl = collection(db, 'usuarios');
+    const getUsuarios = async () => {
+        const usuario = await getUsuario();
+        setusuario(usuario.doc);
+    }
+
 
     useEffect(() => {
-
-        const getUsuarios = async () => {
-
-            const data = await getDocs(usuarioColl);
-            console.log(data);
-            setUser(data.docs.map((doc)=>({...doc.data(), id: doc.id})))
-        }
         getUsuarios();
-    }, []);
-
-
+    }, [])
 
     return (
-        <View>
-            <Text>{user.nombre} </Text>
-            <Text>{user.apellido} </Text>
-            <Text>{user.correo} </Text>
+        <View style={styles.container}  >
+            <Text style={styles.text}>Usuario</Text>
+
+            {
+                usuario && usuario.map(usuario => {
+                    (
+                        <View style={styles.card}>
+
+                            <Text style={styles.text}>Nombre: {usuario.data().nombre}</Text>
+                            <Text style={styles.text}>Apellido: {usuario.data().apellido}</Text>
+                            <Text style={styles.text}>Correo: {usuario.data().correo}</Text>
+                        </View>
+                    )
+
+                })
+            }
+
+
+
+
         </View>
     )
 }
 
 
 
+
+const styles = StyleSheet.create({
+
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
+    text: {
+        fontSize: 18,
+        marginBottom: 15,
+        fontWeight: 'bold',
+        color: 'black'
+    },
+
+    card: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 250,
+        width: 250,
+        backgroundColor: 'red',
+        borderRadius: 8,
+    },
+
+
+})

@@ -1,16 +1,14 @@
-// import { collection, addDoc } from 'firebase/firestore';
-import { collection, addDoc } from 'firebase/firestore';
 
-import { db } from '../database/firebase'
 import React, { useState } from 'react'
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native'
+import { crearUusuario } from '../api/api';
 
-
+import { NavigationContainer } from '@react-navigation/native';
 
 
 export const HomeScreen = () => {
 
- const usuarioColl = collection(db, 'usuarios');
+
 
     const [state, setstate] = useState({
 
@@ -26,24 +24,14 @@ export const HomeScreen = () => {
     }
 
     const crearusuario = async () => {
-        console.log(state.nombre)
-            try {
-            const docRef = await addDoc(usuarioColl, {
-                nombre:state.nombre,
-                apellido:state.apellido,
-                correo:state.correo,
-            });
-            console.log("Document written with ID: ", docRef);
-        } catch (e) {
-            console.error("Error adding document: ", e);
-        }
+        crearUusuario(state.nombre, state.apellido, state.correo)
     }
 
 
 
     return (
 
-
+<NavigationContainer>
         <View style={styles.container}>
 
             <Text style={styles.text}>Formulario</Text>
@@ -74,7 +62,7 @@ export const HomeScreen = () => {
 
 
         </View>
-
+        </NavigationContainer>
     )
 }
 
